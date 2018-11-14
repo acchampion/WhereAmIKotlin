@@ -1,7 +1,7 @@
-Where Am I?
-===========
+Where Am I? (Kotlin)
+====================
 
-View your location on Google Maps (using Java and Android)! 
+View your location on Google Maps (using Kotlin and Android)! 
 This app also shows how to handle location permissions. 
 It's used in the course: [CSE 5236: Mobile Application Development](http://web.cse.ohio-state.edu/~champion/5236).
  
