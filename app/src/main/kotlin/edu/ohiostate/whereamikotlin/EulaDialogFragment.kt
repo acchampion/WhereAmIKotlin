@@ -1,0 +1,32 @@
+package edu.ohiostate.whereamikotlin
+
+import android.app.AlertDialog
+import android.app.Dialog
+import android.os.Bundle
+import android.support.v4.app.DialogFragment
+import android.text.Html
+
+/**
+ * Created by adamcchampion on 2014/09/22.
+ */
+class EulaDialogFragment : DialogFragment() {
+
+    fun setEulaAccepted() {
+        val prefs = activity!!.getSharedPreferences(getString(R.string.prefs), 0)
+        val editor = prefs.edit()
+        editor.putBoolean(getString(R.string.eula_accepted_key), true).apply()
+    }
+
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        // Use the Builder class for convenient dialog construction
+        val builder = AlertDialog.Builder(activity)
+        builder.setTitle(R.string.about_app)
+                .setMessage(Html.fromHtml(getString(R.string.eula)))
+                .setPositiveButton(R.string.accept) { _, _ -> setEulaAccepted() }
+                .setNegativeButton(R.string.decline) { dialog, _ ->
+                    dialog.cancel()
+                    activity?.finish()
+                }
+        return builder.create()
+    }
+}

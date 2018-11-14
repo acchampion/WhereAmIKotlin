@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Where Am I? (Kotlin)</string>
+    <string name="title_activity_maps">Where Am I? (Kotlin)</string>
+    <string name="about">About…</string>
+    <string name="get_location">Get Current Location</string>
+    <string name="show_location">Show Current Location</string>
+    <string name="about_app">About Where Am I?</string>
+    <string name="close">Close</string>
+    <string name="code_credit">© 2017 Adam C. Champion</string>
+    <string name="prefs">Prefs</string>
+    <string name="eula_accepted_key">eula_accepted</string>
+    <string name="eula"><p>By using this app, you agree to abide by the <a href="https://developers.google.com/maps/terms">Google Maps Terms of Service</a> and <a href="https://www.google.com/intl/en/policies/terms/">Google\'s Terms of Service</a>.</p><p><strong>Privacy Policy:</strong> Upon request, this app uses your location in order to show it via Google Maps. Internet access permission is necessary for this purpose. No other information is collected, stored, or transmitted.</p></string>
+    <string name="accept">Accept</string>
+    <string name="decline">Decline</string>
+    <string name="google_play_text_key">google_play_text</string>
+</resources>
