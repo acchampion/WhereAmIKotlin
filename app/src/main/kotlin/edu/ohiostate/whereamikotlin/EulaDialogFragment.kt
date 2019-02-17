@@ -3,6 +3,7 @@ package edu.ohiostate.whereamikotlin
 import android.app.AlertDialog
 import android.app.Dialog
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.support.v4.app.DialogFragment
 import android.text.Html
 
@@ -11,8 +12,8 @@ import android.text.Html
  */
 class EulaDialogFragment : DialogFragment() {
 
-    fun setEulaAccepted() {
-        val prefs = activity!!.getSharedPreferences(getString(R.string.prefs), 0)
+    private fun setEulaAccepted() {
+        val prefs = PreferenceManager.getDefaultSharedPreferences(activity!!)
         val editor = prefs.edit()
         editor.putBoolean(getString(R.string.eula_accepted_key), true).apply()
     }

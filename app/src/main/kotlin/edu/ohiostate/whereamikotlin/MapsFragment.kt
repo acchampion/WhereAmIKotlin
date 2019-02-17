@@ -6,12 +6,12 @@ import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.support.v4.content.ContextCompat
 import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
-
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationRequest
@@ -22,8 +22,6 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
-import com.google.android.gms.tasks.OnCompleteListener
-import com.google.android.gms.tasks.Task
 
 /**
  * Class for Maps Fragment. Sources:
@@ -83,21 +81,19 @@ class MapsFragment : SupportMapFragment(), OnMapReadyCallback {
             locationRequest.interval = 0
             val locationProvider = LocationServices.getFusedLocationProviderClient(activity!!)
             val locationResult = locationProvider.lastLocation
-            locationResult.addOnCompleteListener(activity!!, object : OnCompleteListener<Location> {
-                override fun onComplete(task: Task<Location>) {
-                    if (task.isSuccessful) {
-                        // Set the map's camera position to the current location of the device.
-                        mLocation = task.result as Location
-                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
-                                LatLng(mLocation!!.latitude, mLocation!!.longitude), 16f))
-                    } else {
-                        Log.d(TAG, "Current location is null. Using defaults.")
-                        Log.e(TAG, "Exception: %s", task.exception)
-                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mDefaultLocation, 16f))
-                        mMap.uiSettings?.isMyLocationButtonEnabled = false
-                    }
+            locationResult.addOnCompleteListener(activity!! ) { task ->
+                if (task.isSuccessful) {
+                    // Set the map's camera position to the current location of the device.
+                    mLocation = task.result as Location
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
+                        LatLng(mLocation!!.latitude, mLocation!!.longitude), 16f))
+                } else {
+                    Log.d(TAG, "Current location is null. Using defaults.")
+                    Log.e(TAG, "Exception: %s", task.exception)
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mDefaultLocation, 16f))
+                    mMap.uiSettings?.isMyLocationButtonEnabled = false
                 }
-            })
+            }
         } else {
             requestPermissions(LOCATION_PERMISSIONS, REQUEST_LOCATION_PERMISSIONS)
         }
@@ -115,7 +111,7 @@ class MapsFragment : SupportMapFragment(), OnMapReadyCallback {
     }
 
     private fun setUpEula() {
-        mSettings = activity?.getSharedPreferences(getString(R.string.prefs), 0)
+        mSettings = PreferenceManager.getDefaultSharedPreferences(activity!!)
         val isEulaAccepted = mSettings!!.getBoolean(getString(R.string.eula_accepted_key), false)
         if (!isEulaAccepted) {
             val eulaDialogFragment = EulaDialogFragment()
