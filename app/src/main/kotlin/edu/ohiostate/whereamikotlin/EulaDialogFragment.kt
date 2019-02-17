@@ -5,7 +5,6 @@ import android.app.Dialog
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.support.v4.app.DialogFragment
-import android.text.Html
 
 /**
  * Created by adamcchampion on 2014/09/22.
@@ -22,7 +21,7 @@ class EulaDialogFragment : DialogFragment() {
         // Use the Builder class for convenient dialog construction
         val builder = AlertDialog.Builder(activity)
         builder.setTitle(R.string.about_app)
-                .setMessage(Html.fromHtml(getString(R.string.eula)))
+                .setMessage(Utils.fromHtml(getString(R.string.eula)))
                 .setPositiveButton(R.string.accept) { _, _ -> setEulaAccepted() }
                 .setNegativeButton(R.string.decline) { dialog, _ ->
                     dialog.cancel()
