@@ -7,11 +7,11 @@ import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
 import android.preference.PreferenceManager
-import android.support.v4.content.ContextCompat
 import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import androidx.core.content.ContextCompat
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationRequest
@@ -115,16 +115,18 @@ class MapsFragment : SupportMapFragment(), OnMapReadyCallback {
         val isEulaAccepted = mSettings!!.getBoolean(getString(R.string.eula_accepted_key), false)
         if (!isEulaAccepted) {
             val eulaDialogFragment = EulaDialogFragment()
-            eulaDialogFragment.show(activity?.supportFragmentManager, "eula")
+            if (activity != null) {
+                eulaDialogFragment.show(activity!!.supportFragmentManager, "eula")
+            }
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
-        inflater?.inflate(R.menu.maps_menu, menu)
+        inflater.inflate(R.menu.maps_menu, menu)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item?.itemId) {
             R.id.menu_showcurrentlocation -> {
                 Log.d(TAG, "Showing current location")

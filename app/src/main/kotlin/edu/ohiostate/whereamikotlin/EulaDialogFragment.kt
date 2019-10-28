@@ -4,12 +4,11 @@ import android.app.AlertDialog
 import android.app.Dialog
 import android.os.Bundle
 import android.preference.PreferenceManager
-import android.support.v4.app.DialogFragment
 
 /**
  * Created by adamcchampion on 2014/09/22.
  */
-class EulaDialogFragment : DialogFragment() {
+class EulaDialogFragment : androidx.fragment.app.DialogFragment() {
 
     private fun setEulaAccepted() {
         val prefs = PreferenceManager.getDefaultSharedPreferences(activity!!)
