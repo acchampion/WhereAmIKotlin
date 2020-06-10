@@ -6,12 +6,12 @@ import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
-import android.preference.PreferenceManager
 import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import androidx.core.content.ContextCompat
+import androidx.preference.PreferenceManager
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationRequest
@@ -48,7 +48,7 @@ class MapsFragment : SupportMapFragment(), OnMapReadyCallback {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
 
-        mApiClient = GoogleApiClient.Builder(activity!!)
+        mApiClient = GoogleApiClient.Builder(requireActivity())
                 .addApi(LocationServices.API)
                 .addConnectionCallbacks(object : GoogleApiClient.ConnectionCallbacks {
                     override fun onConnected(bundle: Bundle?) {
@@ -73,15 +73,15 @@ class MapsFragment : SupportMapFragment(), OnMapReadyCallback {
     private fun findLocation() {
         updateLocationUI()
         if (hasLocationPermission()) {
-            mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(activity!!)
+            mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(requireActivity())
             mDefaultLocation = LatLng(40.0, -83.0)
             val locationRequest = LocationRequest.create()
             locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
             locationRequest.numUpdates = 1
             locationRequest.interval = 0
-            val locationProvider = LocationServices.getFusedLocationProviderClient(activity!!)
+            val locationProvider = LocationServices.getFusedLocationProviderClient(requireActivity())
             val locationResult = locationProvider.lastLocation
-            locationResult.addOnCompleteListener(activity!! ) { task ->
+            locationResult.addOnCompleteListener(requireActivity()) { task ->
                 if (task.isSuccessful) {
                     // Set the map's camera position to the current location of the device.
                     mLocation = task.result as Location
@@ -111,12 +111,12 @@ class MapsFragment : SupportMapFragment(), OnMapReadyCallback {
     }
 
     private fun setUpEula() {
-        mSettings = PreferenceManager.getDefaultSharedPreferences(activity!!)
+        mSettings = PreferenceManager.getDefaultSharedPreferences(requireActivity())
         val isEulaAccepted = mSettings!!.getBoolean(getString(R.string.eula_accepted_key), false)
         if (!isEulaAccepted) {
             val eulaDialogFragment = EulaDialogFragment()
             if (activity != null) {
-                eulaDialogFragment.show(activity!!.supportFragmentManager, "eula")
+                eulaDialogFragment.show(requireActivity().supportFragmentManager, "eula")
             }
         }
     }
@@ -127,7 +127,7 @@ class MapsFragment : SupportMapFragment(), OnMapReadyCallback {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item?.itemId) {
+        when (item.itemId) {
             R.id.menu_showcurrentlocation -> {
                 Log.d(TAG, "Showing current location")
                 if (hasLocationPermission()) {
@@ -168,7 +168,10 @@ class MapsFragment : SupportMapFragment(), OnMapReadyCallback {
                     requestPermissions(LOCATION_PERMISSIONS, REQUEST_LOCATION_PERMISSIONS)
                 }
             } catch (e: SecurityException) {
-                Log.e("Exception: %s", e.message)
+				val msg = e.message
+				if (msg != null) {
+					Log.e("Exception: %s", msg)
+				}
             }
         }
         else {
@@ -193,7 +196,7 @@ class MapsFragment : SupportMapFragment(), OnMapReadyCallback {
     }
 
     private fun hasLocationPermission(): Boolean {
-        val result = ContextCompat.checkSelfPermission(activity!!, Manifest.permission.ACCESS_FINE_LOCATION)
+        val result = ContextCompat.checkSelfPermission(requireActivity(), Manifest.permission.ACCESS_FINE_LOCATION)
         return result == PackageManager.PERMISSION_GRANTED
     }
 

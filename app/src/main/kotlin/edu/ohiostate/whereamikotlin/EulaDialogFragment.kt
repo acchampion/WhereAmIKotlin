@@ -3,7 +3,7 @@ package edu.ohiostate.whereamikotlin
 import android.app.AlertDialog
 import android.app.Dialog
 import android.os.Bundle
-import android.preference.PreferenceManager
+import androidx.preference.PreferenceManager
 
 /**
  * Created by adamcchampion on 2014/09/22.
@@ -11,7 +11,7 @@ import android.preference.PreferenceManager
 class EulaDialogFragment : androidx.fragment.app.DialogFragment() {
 
     private fun setEulaAccepted() {
-        val prefs = PreferenceManager.getDefaultSharedPreferences(activity!!)
+        val prefs = PreferenceManager.getDefaultSharedPreferences(requireActivity())
         val editor = prefs.edit()
         editor.putBoolean(getString(R.string.eula_accepted_key), true).apply()
     }
