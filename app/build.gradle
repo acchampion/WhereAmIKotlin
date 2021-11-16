@@ -1,12 +1,14 @@
-apply plugin: 'com.android.application'
-
-apply plugin: 'kotlin-android'
+plugins {
+	id 'com.android.application'
+	id 'kotlin-android'
+	id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
+}
 
 android {
     compileSdkVersion 30
     defaultConfig {
         applicationId "edu.ohiostate.whereamikotlin"
-        minSdkVersion 22
+        minSdkVersion 23
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
@@ -24,15 +26,14 @@ android {
 }
 
 dependencies {
-	def preference_version = "1.1.1"
-
 	implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-	implementation 'com.google.android.gms:play-services-location:17.1.0'
-	implementation 'com.google.android.gms:play-services-maps:17.0.0'
-	implementation 'androidx.appcompat:appcompat:1.2.0'
-	implementation "androidx.preference:preference-ktx:$preference_version"
-	testImplementation 'junit:junit:4.13.1'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+	implementation "com.google.android.gms:play-services-location:$rootProject.playServicesVersion"
+	implementation "com.google.android.gms:play-services-maps:$rootProject.playServicesVersion"
+	implementation "androidx.appcompat:appcompat:$rootProject.appcompatVersion"
+	implementation "androidx.activity:activity-ktx:$rootProject.activityVersion"
+	implementation "androidx.preference:preference-ktx:$rootProject.preferenceVersion"
+	testImplementation "junit:junit:$rootProject.junitLibVersion"
+    androidTestImplementation "androidx.test.ext:junit:$rootProject.junitVersion"
+    androidTestImplementation "androidx.test.espresso:espresso-core:$rootProject.espressoVersion"
 }
