@@ -17,12 +17,12 @@ import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.preference.PreferenceManager
-import com.google.android.gms.common.api.GoogleApiClient
-import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.GoogleMap.OnMyLocationButtonClickListener
+import com.google.android.gms.maps.GoogleMap.OnMyLocationClickListener
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
@@ -37,9 +37,9 @@ import com.google.android.gms.tasks.Task
  *
  * Created by adamcchampion on 2017/09/24.
  */
-class MapsFragment : SupportMapFragment(), OnMapReadyCallback {
+class MapsFragment : SupportMapFragment(), OnMapReadyCallback, OnMyLocationButtonClickListener,
+	OnMyLocationClickListener {
     private lateinit var mMap: GoogleMap // Could be null if Google Play services APK is unavailable
-    private lateinit var mApiClient: GoogleApiClient
     private var mLocation: Location? = null
     private var mDefaultLocation: LatLng? = null
 	private var mMapReady = false
@@ -65,20 +65,6 @@ class MapsFragment : SupportMapFragment(), OnMapReadyCallback {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
-        val activity: Activity = requireActivity()
-        mApiClient = GoogleApiClient.Builder(activity)
-            .addApi(LocationServices.API)
-            .addConnectionCallbacks(object : ConnectionCallbacks {
-                override fun onConnected(bundle: Bundle?) {
-                    val theActivity: Activity = requireActivity()
-                    theActivity.invalidateOptionsMenu()
-                }
-
-                override fun onConnectionSuspended(i: Int) {
-                    Log.d(TAG, "GoogleAPIClient connection suspended")
-                }
-            })
-            .build()
         getMapAsync(this)
     }
 
@@ -117,7 +103,7 @@ class MapsFragment : SupportMapFragment(), OnMapReadyCallback {
                 } else {
                     Log.d(TAG, "Current location is null. Using defaults.")
                     Log.e(TAG, "Exception: %s", task.exception)
-                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mDefaultLocation, 16f))
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mDefaultLocation!!, 16f))
                     mMap.uiSettings.isMyLocationButtonEnabled = false
                 }
             }
@@ -128,15 +114,9 @@ class MapsFragment : SupportMapFragment(), OnMapReadyCallback {
         super.onStart()
         val activity: Activity = requireActivity()
         activity.invalidateOptionsMenu()
-        mApiClient.connect()
     }
 
-    override fun onStop() {
-        super.onStop()
-        mApiClient.disconnect()
-    }
-
-    private fun setUpEula() {
+	private fun setUpEula() {
         val activity = requireActivity()
         val sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity)
         val isEulaAccepted = sharedPrefs.getBoolean(getString(R.string.eula_accepted_key), false)
@@ -200,4 +180,21 @@ class MapsFragment : SupportMapFragment(), OnMapReadyCallback {
     private fun hasLocationPermission(): Boolean {
         return !lacksLocationPermission()
     }
+
+	override fun onMyLocationButtonClick(): Boolean {
+		val context = requireContext()
+		Toast.makeText(context, "MyLocation button clicked", Toast.LENGTH_SHORT).show()
+		if (hasLocationPermission()) {
+			findLocation()
+		}
+		// Return false so that we don't consume the event and the default behavior still occurs
+		// (the camera animates to the user's current position).
+		return false
+	}
+
+	override fun onMyLocationClick(location: Location) {
+		val context = requireContext()
+		Toast.makeText(context, "Current location:\n$location", Toast.LENGTH_LONG).show()
+	}
+
 }

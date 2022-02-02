@@ -5,15 +5,21 @@ plugins {
 }
 
 android {
-    compileSdkVersion 30
+	compileSdkVersion 32
+	buildToolsVersion '32.0.0'
     defaultConfig {
         applicationId "edu.ohiostate.whereamikotlin"
         minSdkVersion 23
-        targetSdkVersion 30
+        targetSdkVersion 32
         versionCode 1
         versionName "1.0"
+		vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
+	compileOptions {
+		sourceCompatibility JavaVersion.VERSION_11
+		targetCompatibility JavaVersion.VERSION_11
+	}
     buildTypes {
         release {
             minifyEnabled false
@@ -27,9 +33,9 @@ android {
 
 dependencies {
 	implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-	implementation "com.google.android.gms:play-services-location:$rootProject.playServicesVersion"
-	implementation "com.google.android.gms:play-services-maps:$rootProject.playServicesVersion"
+    implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+	implementation "com.google.android.gms:play-services-location:$rootProject.playServicesLocationVersion"
+	implementation "com.google.android.gms:play-services-maps:$rootProject.playServicesMapsVersion"
 	implementation "androidx.appcompat:appcompat:$rootProject.appcompatVersion"
 	implementation "androidx.activity:activity-ktx:$rootProject.activityVersion"
 	implementation "androidx.preference:preference-ktx:$rootProject.preferenceVersion"
