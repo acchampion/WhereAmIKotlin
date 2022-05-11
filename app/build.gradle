@@ -29,6 +29,7 @@ android {
 	sourceSets {
 		main.java.srcDirs += 'src/main/kotlin'
 	}
+	namespace 'edu.ohiostate.whereamikotlin'
 }
 
 dependencies {
