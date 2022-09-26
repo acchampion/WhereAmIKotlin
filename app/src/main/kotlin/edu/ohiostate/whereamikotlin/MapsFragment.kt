@@ -5,7 +5,6 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.pm.PackageManager
 import android.location.Location
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -13,12 +12,12 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts.RequestPermission
-import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.preference.PreferenceManager
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.Priority
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.GoogleMap.OnMyLocationButtonClickListener
@@ -43,7 +42,7 @@ class MapsFragment : SupportMapFragment(), OnMapReadyCallback, OnMyLocationButto
     private var mLocation: Location? = null
     private var mDefaultLocation: LatLng? = null
 	private var mMapReady = false
-	private val TAG = javaClass.simpleName
+	private val classTag = javaClass.simpleName
 
     private val mActivityResult = registerForActivityResult(
         RequestPermission()
@@ -54,7 +53,7 @@ class MapsFragment : SupportMapFragment(), OnMapReadyCallback, OnMyLocationButto
             updateLocationUI()
         } else {
             // The user denied location permission, so show them a message.
-            Log.e(TAG, "Error: location permission denied")
+            Log.e(classTag, "Error: location permission denied")
             if (lacksLocationPermission()) {
                 Toast.makeText(requireActivity(), "Location permission denied", Toast.LENGTH_SHORT)
                     .show()
@@ -79,7 +78,7 @@ class MapsFragment : SupportMapFragment(), OnMapReadyCallback, OnMyLocationButto
         val activity: Activity = requireActivity()
         mDefaultLocation = LatLng(40.0, -83.0)
         val locationRequest = LocationRequest.create()
-        locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+        locationRequest.priority = Priority.PRIORITY_HIGH_ACCURACY
         locationRequest.numUpdates = 1
         locationRequest.interval = 0
         val locationProvider = LocationServices.getFusedLocationProviderClient(activity)
@@ -101,8 +100,8 @@ class MapsFragment : SupportMapFragment(), OnMapReadyCallback, OnMyLocationButto
                         )
                     }
                 } else {
-                    Log.d(TAG, "Current location is null. Using defaults.")
-                    Log.e(TAG, "Exception: %s", task.exception)
+                    Log.d(classTag, "Current location is null. Using defaults.")
+                    Log.e(classTag, "Exception: %s", task.exception)
                     mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mDefaultLocation!!, 16f))
                     mMap.uiSettings.isMyLocationButtonEnabled = false
                 }
@@ -133,7 +132,7 @@ class MapsFragment : SupportMapFragment(), OnMapReadyCallback, OnMyLocationButto
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.menu_showcurrentlocation) {
-            Log.d(TAG, "Showing current location")
+            Log.d(classTag, "Showing current location")
             if (lacksLocationPermission()) {
                 mActivityResult.launch(Manifest.permission.ACCESS_FINE_LOCATION)
             } else {
@@ -144,7 +143,6 @@ class MapsFragment : SupportMapFragment(), OnMapReadyCallback, OnMyLocationButto
     }
 
     @SuppressLint("MissingPermission")
-    @RequiresApi(api = Build.VERSION_CODES.M)
     private fun updateLocationUI() {
         if (hasLocationPermission() && mMapReady) {
 			mMap.isMyLocationEnabled = true
@@ -168,7 +166,6 @@ class MapsFragment : SupportMapFragment(), OnMapReadyCallback, OnMyLocationButto
         mMap.isIndoorEnabled = true
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
     private fun lacksLocationPermission(): Boolean {
         val activity: Activity = requireActivity()
         val result =
@@ -176,7 +173,6 @@ class MapsFragment : SupportMapFragment(), OnMapReadyCallback, OnMyLocationButto
         return result != PackageManager.PERMISSION_GRANTED
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
     private fun hasLocationPermission(): Boolean {
         return !lacksLocationPermission()
     }

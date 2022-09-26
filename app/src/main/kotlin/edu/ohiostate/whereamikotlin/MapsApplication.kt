@@ -4,7 +4,6 @@ import android.app.Application
 import android.util.Log
 import com.google.android.gms.maps.MapsInitializer
 import com.google.android.gms.maps.OnMapsSdkInitializedCallback
-import edu.ohiostate.whereamikotlin.MapsApplication
 
 class MapsApplication : Application(), OnMapsSdkInitializedCallback {
     override fun onCreate() {
