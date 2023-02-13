@@ -77,10 +77,8 @@ class MapsFragment : SupportMapFragment(), OnMapReadyCallback, OnMyLocationButto
     private fun findLocation() {
         val activity: Activity = requireActivity()
         mDefaultLocation = LatLng(40.0, -83.0)
-        val locationRequest = LocationRequest.create()
-        locationRequest.priority = Priority.PRIORITY_HIGH_ACCURACY
-        locationRequest.numUpdates = 1
-        locationRequest.interval = 0
+		val builder = LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 5_000)
+
         val locationProvider = LocationServices.getFusedLocationProviderClient(activity)
         if (hasLocationPermission()) {
             updateLocationUI()
