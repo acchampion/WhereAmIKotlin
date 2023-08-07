@@ -5,27 +5,30 @@ plugins {
 }
 
 android {
-	compileSdkVersion 33
-	buildToolsVersion '32.0.0'
     defaultConfig {
-        applicationId "edu.ohiostate.whereamikotlin"
-        minSdkVersion 24
-        targetSdkVersion 33
-        versionCode 1
-        versionName "1.0"
+		compileSdk = 33
+		buildToolsVersion = "34.0.0"
+		applicationId("edu.ohiostate.whereamikotlin")
+		minSdkVersion(24)
+		targetSdkVersion(33)
+		versionCode = 1
+		versionName = "1.0"
 		vectorDrawables.useSupportLibrary = true
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 	compileOptions {
-		sourceCompatibility JavaVersion.VERSION_11
-		targetCompatibility JavaVersion.VERSION_11
+		sourceCompatibility JavaVersion.VERSION_17
+		targetCompatibility JavaVersion.VERSION_17
 	}
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled = false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+	kotlin {
+		jvmToolchain(17)
+}
 	sourceSets {
 		main.java.srcDirs += 'src/main/kotlin'
 	}
@@ -34,13 +37,22 @@ android {
 
 dependencies {
 	implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-	implementation "com.google.android.gms:play-services-location:$rootProject.playServicesLocationVersion"
-	implementation "com.google.android.gms:play-services-maps:$rootProject.playServicesMapsVersion"
-	implementation "androidx.appcompat:appcompat:$rootProject.appcompatVersion"
-	implementation "androidx.activity:activity-ktx:$rootProject.activityVersion"
-	implementation "androidx.preference:preference-ktx:$rootProject.preferenceVersion"
-	testImplementation "junit:junit:$rootProject.junitLibVersion"
-    androidTestImplementation "androidx.test.ext:junit:$rootProject.junitVersion"
-    androidTestImplementation "androidx.test.espresso:espresso-core:$rootProject.espressoVersion"
+
+	constraints {
+		implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version") {
+			because("kotlin-stdlib-jdk7 is now a part of kotlin-stdlib")
+		}
+		implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version") {
+			because("kotlin-stdlib-jdk8 is now a part of kotlin-stdlib")
+		}
+	}
+
+	implementation("com.google.android.gms:play-services-location:$rootProject.playServicesLocationVersion")
+	implementation("com.google.android.gms:play-services-maps:$rootProject.playServicesMapsVersion")
+	implementation("androidx.appcompat:appcompat:$rootProject.appcompatVersion")
+	implementation("androidx.activity:activity-ktx:$rootProject.activityVersion")
+	implementation("androidx.preference:preference-ktx:$rootProject.preferenceVersion")
+	testImplementation("junit:junit:$rootProject.junitLibVersion")
+    androidTestImplementation("androidx.test.ext:junit:$rootProject.junitVersion")
+    androidTestImplementation("androidx.test.espresso:espresso-core:$rootProject.espressoVersion")
 }

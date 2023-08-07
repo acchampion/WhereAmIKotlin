@@ -47,3 +47,6 @@ out
 # API Key for Google Maps
 app/src/debug/
 app/src/release/
+
+# Build cache
+build-cache/
