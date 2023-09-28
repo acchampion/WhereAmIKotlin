@@ -156,6 +156,10 @@ class MapsFragment : SupportMapFragment(), OnMapReadyCallback, OnMyLocationButto
             MarkerOptions().position(LatLng(40.0, -83.0))
                 .title("Ohio State University")
         )
+		mMap.addMarker(
+			MarkerOptions().position(LatLng(37.7749, -122.14494))
+				.title("San Francisco Bay Area, CA")
+		)
         if (hasLocationPermission()) {
             mMap.isMyLocationEnabled = true
             mMap.uiSettings.isMyLocationButtonEnabled = true
