@@ -37,12 +37,12 @@ import com.google.android.gms.tasks.Task
  * Created by adamcchampion on 2017/09/24.
  */
 class MapsFragment : SupportMapFragment(), OnMapReadyCallback, OnMyLocationButtonClickListener,
-	OnMyLocationClickListener {
+    OnMyLocationClickListener {
     private lateinit var mMap: GoogleMap // Could be null if Google Play services APK is unavailable
     private var mLocation: Location? = null
     private var mDefaultLocation: LatLng? = null
-	private var mMapReady = false
-	private val classTag = javaClass.simpleName
+    private var mMapReady = false
+    private val classTag = javaClass.simpleName
 
     private val mActivityResult = registerForActivityResult(
         RequestPermission()
@@ -77,7 +77,7 @@ class MapsFragment : SupportMapFragment(), OnMapReadyCallback, OnMyLocationButto
     private fun findLocation() {
         val activity: Activity = requireActivity()
         mDefaultLocation = LatLng(40.0, -83.0)
-		val builder = LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 5_000)
+        val builder = LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 5_000)
 
         val locationProvider = LocationServices.getFusedLocationProviderClient(activity)
         if (hasLocationPermission()) {
@@ -113,7 +113,7 @@ class MapsFragment : SupportMapFragment(), OnMapReadyCallback, OnMyLocationButto
         activity.invalidateOptionsMenu()
     }
 
-	private fun setUpEula() {
+    private fun setUpEula() {
         val activity = requireActivity()
         val sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity)
         val isEulaAccepted = sharedPrefs.getBoolean(getString(R.string.eula_accepted_key), false)
@@ -143,23 +143,23 @@ class MapsFragment : SupportMapFragment(), OnMapReadyCallback, OnMyLocationButto
     @SuppressLint("MissingPermission")
     private fun updateLocationUI() {
         if (hasLocationPermission() && mMapReady) {
-			mMap.isMyLocationEnabled = true
-			mMap.uiSettings.isMyLocationButtonEnabled = true
-		}
+            mMap.isMyLocationEnabled = true
+            mMap.uiSettings.isMyLocationButtonEnabled = true
+        }
     }
 
     @SuppressLint("MissingPermission")
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
-		mMapReady = true
+        mMapReady = true
         mMap.addMarker(
             MarkerOptions().position(LatLng(40.0, -83.0))
                 .title("Ohio State University")
         )
-		mMap.addMarker(
-			MarkerOptions().position(LatLng(37.7749, -122.14494))
-				.title("San Francisco Bay Area, CA")
-		)
+        mMap.addMarker(
+            MarkerOptions().position(LatLng(37.7749, -122.14494))
+                .title("San Francisco Bay Area, CA")
+        )
         if (hasLocationPermission()) {
             mMap.isMyLocationEnabled = true
             mMap.uiSettings.isMyLocationButtonEnabled = true
@@ -179,20 +179,20 @@ class MapsFragment : SupportMapFragment(), OnMapReadyCallback, OnMyLocationButto
         return !lacksLocationPermission()
     }
 
-	override fun onMyLocationButtonClick(): Boolean {
-		val context = requireContext()
-		Toast.makeText(context, "MyLocation button clicked", Toast.LENGTH_SHORT).show()
-		if (hasLocationPermission()) {
-			findLocation()
-		}
-		// Return false so that we don't consume the event and the default behavior still occurs
-		// (the camera animates to the user's current position).
-		return false
-	}
+    override fun onMyLocationButtonClick(): Boolean {
+        val context = requireContext()
+        Toast.makeText(context, "MyLocation button clicked", Toast.LENGTH_SHORT).show()
+        if (hasLocationPermission()) {
+            findLocation()
+        }
+        // Return false so that we don't consume the event and the default behavior still occurs
+        // (the camera animates to the user's current position).
+        return false
+    }
 
-	override fun onMyLocationClick(location: Location) {
-		val context = requireContext()
-		Toast.makeText(context, "Current location:\n$location", Toast.LENGTH_LONG).show()
-	}
+    override fun onMyLocationClick(location: Location) {
+        val context = requireContext()
+        Toast.makeText(context, "Current location:\n$location", Toast.LENGTH_LONG).show()
+    }
 
 }
