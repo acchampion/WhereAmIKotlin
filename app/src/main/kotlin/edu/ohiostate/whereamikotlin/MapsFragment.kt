@@ -10,9 +10,12 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts.RequestPermission
 import androidx.core.content.ContextCompat
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.DialogFragment
 import androidx.preference.PreferenceManager
 import com.google.android.gms.location.LocationRequest
@@ -37,7 +40,7 @@ import com.google.android.gms.tasks.Task
  * Created by adamcchampion on 2017/09/24.
  */
 class MapsFragment : SupportMapFragment(), OnMapReadyCallback, OnMyLocationButtonClickListener,
-    OnMyLocationClickListener {
+    OnMyLocationClickListener, MenuProvider {
     private lateinit var mMap: GoogleMap // Could be null if Google Play services APK is unavailable
     private var mLocation: Location? = null
     private var mDefaultLocation: LatLng? = null
@@ -63,8 +66,14 @@ class MapsFragment : SupportMapFragment(), OnMapReadyCallback, OnMyLocationButto
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
         getMapAsync(this)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val menuHost: MenuHost = requireActivity()
+        menuHost.addMenuProvider(this)
     }
 
     override fun onResume() {
@@ -113,6 +122,13 @@ class MapsFragment : SupportMapFragment(), OnMapReadyCallback, OnMyLocationButto
         activity.invalidateOptionsMenu()
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+
+        val menuHost: MenuHost = requireActivity()
+        menuHost.removeMenuProvider(this)
+    }
+
     private fun setUpEula() {
         val activity = requireActivity()
         val sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity)
@@ -123,13 +139,12 @@ class MapsFragment : SupportMapFragment(), OnMapReadyCallback, OnMyLocationButto
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu, inflater)
-        inflater.inflate(R.menu.maps_menu, menu)
+    override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+        menuInflater.inflate(R.menu.maps_menu, menu)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.menu_showcurrentlocation) {
+    override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+        if (menuItem.itemId == R.id.menu_showcurrentlocation) {
             Log.d(classTag, "Showing current location")
             if (lacksLocationPermission()) {
                 mActivityResult.launch(Manifest.permission.ACCESS_FINE_LOCATION)
@@ -194,5 +209,4 @@ class MapsFragment : SupportMapFragment(), OnMapReadyCallback, OnMyLocationButto
         val context = requireContext()
         Toast.makeText(context, "Current location:\n$location", Toast.LENGTH_LONG).show()
     }
-
 }

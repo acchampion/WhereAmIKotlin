@@ -6,19 +6,19 @@ plugins {
 
 android {
     defaultConfig {
-        compileSdk = 34
-        buildToolsVersion = "34.0.0"
+        compileSdk = 35
+        buildToolsVersion = "35.0.0"
         applicationId("edu.ohiostate.whereamikotlin")
         minSdkVersion(24)
-        targetSdkVersion(34)
+        targetSdkVersion(35)
         versionCode = 1
         versionName = "1.0"
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_17
-        targetCompatibility JavaVersion.VERSION_17
+        sourceCompatibility JavaVersion.VERSION_21
+        targetCompatibility JavaVersion.VERSION_21
     }
     buildTypes {
         release {
@@ -26,13 +26,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-    kotlin {
-        jvmToolchain(17)
-    }
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
     }
-    namespace 'edu.ohiostate.whereamikotlin'
+    namespace = 'edu.ohiostate.whereamikotlin'
 }
 
 dependencies {
